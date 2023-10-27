@@ -13,9 +13,9 @@ namespace Business
         public List<Invoice> GetByDate(DateTime date)
         {
             DInvoice data = new DInvoice();
-            var invoices = data.Get();
-            var result = invoices.Where(x => x.date == date).ToList();
-            return result;
+            var invoices = data.GetInvoices();
+           // var result = invoices.Where(x => x.date == date).ToList();
+            return invoices;
         }
     }
 }

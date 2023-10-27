@@ -11,7 +11,7 @@ namespace Data
 {
     public class DInvoice
     {
-        public static string connectionString = "Data Source=LAB1504-26\\SQLEXPRESS;Initial Catalog=FacturaDB;User ID=Tecsup2;Password=123456";
+        public static string connectionString = "Data Source=LAB1504-26\\SQLEXPRESS;Initial Catalog=FacturaDB;User ID=Tecsup;Password=123456";
 
         public List<Invoice> GetInvoices()
         {
