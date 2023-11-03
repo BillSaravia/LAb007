@@ -10,12 +10,13 @@ namespace Business
 {
     public class BInvoice
     {
-        public List<Invoice> GetByDate(DateTime date)
+        public List<Invoice> GetByDate(DateTime? date)
         {
             DInvoice data = new DInvoice();
-            var invoices = data.GetInvoices();
-           // var result = invoices.Where(x => x.date == date).ToList();
-            return invoices;
+            var Invoice = data.GetInvoices();
+            var result = Invoice.Where(x => x.date == date).ToList();
+            return result;
         }
+
     }
 }

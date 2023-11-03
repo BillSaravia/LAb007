@@ -11,50 +11,91 @@ namespace Data
 {
     public class DInvoice
     {
-        public static string connectionString = "Data Source=LAB1504-26\\SQLEXPRESS;Initial Catalog=FacturaDB;User ID=Tecsup;Password=123456";
+        public object MessageBox { get; private set; }
+
+        public DateTime Transformar(DateTime a)
+        {
+            string[] fechaFormateada = a.ToString().Split(' ');
+            return DateTime.Parse(fechaFormateada[0]);
+        }
+
 
         public List<Invoice> GetInvoices()
         {
-            List<Invoice> invoices = new List<Invoice>();
+            DInvoice func = new DInvoice();
+
+            string connectionString = "Data Source=LAB1504-26\\SQLEXPRESS;Initial Catalog=Facrtura;User ID=userTecsup12;Password=123456";
+
+            List<Invoice> Lista_invoices = new List<Invoice>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                // Abrir la conexión
                 connection.Open();
+                string query = "usp_ListarInvoice";
 
-                string procedure = "ListarInvoices";
-
-                using (SqlCommand command = new SqlCommand(procedure, connection))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
+
+
                     command.CommandType = CommandType.StoredProcedure;
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        // Verificar si hay filas
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
-                                Invoice listinvoice = new Invoice
+                                // Leer los datos de cada fila
+                                Lista_invoices.Add(new Invoice
                                 {
-                                    invoice_id = reader.GetInt32(reader.GetOrdinal("invoice_id")),
-                                    customer_id = reader.GetInt32(reader.GetOrdinal("customer_id")),
-                                    date = reader.GetDateTime(reader.GetOrdinal("date")),
-                                    total = reader.GetDecimal(reader.GetOrdinal("total")),
-                                    active = reader.GetBoolean(reader.GetOrdinal("active"))
-                                };
-                                invoices.Add(listinvoice);
-                                Console.WriteLine($"invoice_id: {listinvoice.invoice_id}");
-                                Console.WriteLine($"customer_id: {listinvoice.customer_id}");
-                                Console.WriteLine($"date: {listinvoice.date}");
-                                Console.WriteLine($"total: {listinvoice.total}");
-                                Console.WriteLine($"active: {listinvoice.active}");
+                                    invoice_id = (int)reader["invoice_id"],
+                                    customer_id = (int)reader["customer_id"],
+                                    date = func.Transformar((DateTime)reader["date"]),
+                                    total = (decimal)reader["total"]
+                                });
+
                             }
                         }
                     }
-                    connection.Close();
                 }
+                // Cerrar la conexión
+                connection.Close();
+            }
+            return Lista_invoices;
+        }
 
-                return invoices;
+
+        public string Put(int customer_id, DateTime date, Decimal total)
+        {
+            try
+            {
+                string connectionString = "Data Source=LAB1504-18\\SQLEXPRESS;Initial Catalog=db;User ID=userTecsup;Password=123456";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand("InsertarInvoice1", connection);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@customer_id", customer_id);
+                    cmd.Parameters.AddWithValue("@date", date);
+                    cmd.Parameters.AddWithValue("@total", total);
+
+                    cmd.ExecuteNonQuery();
+                    return "Se insertó correctamente.";
+                }
+            }
+            catch (Exception ex)
+            {
+                return "Error al ingresar los datos.";
             }
         }
+
+
+
     }
+
+
+
+
 }

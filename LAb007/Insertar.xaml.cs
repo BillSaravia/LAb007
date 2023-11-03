@@ -1,8 +1,6 @@
-﻿using Business;
-using Entity;
+﻿using Data;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,30 +17,22 @@ using System.Windows.Shapes;
 namespace LAb007
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Lógica de interacción para Insertar.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Insertar : Window
     {
-        public MainWindow()
+        public Insertar()
         {
-
             InitializeComponent();
         }
 
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            DInvoice func = new DInvoice();
             DateTime selectedDate = txtDate.SelectedDate.Value;
-            BInvoice business = new BInvoice();
-            List<Invoice> Data = business.GetByDate(selectedDate);
-            McDataGrid.ItemsSource = Data;
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            Window window = new Insertar();
-            window.Show();
+            Decimal total = Decimal.Parse(txtTotal.Text);
+            int customer_id = int.Parse(txtCustomer_id.Text);
+            func.Put(customer_id, selectedDate, total);
         }
     }
 }
