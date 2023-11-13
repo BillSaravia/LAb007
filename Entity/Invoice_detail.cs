@@ -8,12 +8,12 @@ namespace Entity
 {
     public class InvoiceDetail
     {
-        public int detail_id { get; set; }
-        public int invoice_id { get; set; }
-        public int product_id { get; set; }
-        public int quantity { get; set; }
-        public decimal price { get; set; }
-        public decimal subtotal { get; set; }
-        public bool active { get; set; }
+        public int Detail_id { get; set; }
+        public int Invoice_id { get; set; }
+        public int Product_id { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Subtotal { get; set; }
+        public bool Active { get; set; }
     }
 }

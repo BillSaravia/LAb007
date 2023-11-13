@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace demo09C.Models
+﻿namespace demo09C.Models
 {
     public class InvoiceModel
     {
@@ -8,6 +6,6 @@ namespace demo09C.Models
         public int Id { get; set; }
         public decimal Total { get; set; }
 
-        public int igv {get; set; }
+        public decimal Igv {get; set; }
     }
 }

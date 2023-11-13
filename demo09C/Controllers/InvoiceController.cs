@@ -1,31 +1,67 @@
-﻿using demo09C.Models;
+﻿using Business;
+using demo09C.Models;
+using Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Business;
-using Entity;
-using Data;
 
 
 namespace demo09C.Controllers
 {
     public class InvoiceController : Controller
     {
+
         // GET: InvoiceController
         public ActionResult Index()
         {
-
-            DInvoice bInvoice = new DInvoice();
-            List<invoices> invoicesEntity = bInvoice.Get();
-
-            List<InvoiceModel> invoices = invoicesEntity.Select(x => new InvoiceModel
+            BInvoice bInvoice = new BInvoice();
+            List<Invoice> invoicesEntity = bInvoice.GetInvoiceActives();
+            List<InvoiceModel> invoices = invoicesEntity.Select(x =>
             {
-                Id = x.invoice_id,
-                Total = x.total,
-                Igv = x.total * 0.18M,
+                double v = Convert.ToDouble(x.Total);
+                return new InvoiceModel
+                {
+                    Id = x.Invoice_id,
+                    Total = x.Total,
+                    Igv = (decimal)(0.18 * v)
+                };
             }).ToList();
 
-
             return View(invoices);
+        }
+
+        // GET: InvoiceController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            BInvoice bInvoice = new BInvoice();
+            bInvoice.DeleteInvoice(id);
+
+            List<Invoice> invoicesEntity = bInvoice.GetInvoiceActives();
+            List<InvoiceModel> invoices = invoicesEntity.Select(x =>
+            {
+                double v = Convert.ToDouble(x.Total);
+                return new InvoiceModel
+                {
+                    Id = x.Invoice_id,
+                    Total = x.Total,
+                    Igv = (decimal)(0.18 * v)
+                };
+            }).ToList();
+            return View("Index", invoices);
+        }
+
+        // POST: InvoiceController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: InvoiceController/Details/5
@@ -43,10 +79,14 @@ namespace demo09C.Controllers
         // POST: InvoiceController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CreateInvoiceModel model)
         {
             try
             {
+                BInvoice bInvoice = new BInvoice();
+                Invoice invoice = new Invoice();
+
+                bInvoice.InsertInvoice(model.Customer_id, DateTime.Now, model.Total);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -76,25 +116,6 @@ namespace demo09C.Controllers
             }
         }
 
-        // GET: InvoiceController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: InvoiceController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

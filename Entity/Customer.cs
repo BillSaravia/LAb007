@@ -10,12 +10,10 @@ namespace Entity
 {
     public class Customer
     {
-        public int customer_id { get; set; }
-        public string name { get; set; }
-        public string address { get; set; }
-        public string phone { get; set; }
-        public bool active { get; set; }
+        public int Customer_id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+        public bool Active { get; set; }
     }
 }
-
-

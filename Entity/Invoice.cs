@@ -8,11 +8,11 @@ namespace Entity
 {
     public class Invoice
     {
-        public int invoice_id { get; set; }
-        public int customer_id { get; set; }
-        public DateTime date { get; set; }
-        public decimal total { get; set; }
-        public bool active { get; set; }
+        public int Invoice_id { set; get; }
+        public int Customer_id { set; get; }
+        public DateTime Date { set; get; }
+        public decimal Total { set; get; }
+        public bool Active { set; get; }
+
     }
 }
-
