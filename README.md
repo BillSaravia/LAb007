@@ -1,7 +1,7 @@
 # LAb007
-CREATE PROCEDURE ListarInvoices 
-AS
-BEGIN
+#CREATE PROCEDURE ListarInvoices 
+#AS
+#BEGIN
     SELECT
       [invoice_id],
       [customer_id],
